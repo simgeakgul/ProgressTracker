@@ -1,19 +1,86 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>My Free App</title>
-  <link rel="stylesheet" href="styles.css">
+  <meta charset="utf-8">
+  <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.18/index.global.min.css">
+  <style>
+    body { font-family: system-ui, sans-serif; margin:0; }
+    #scoreBox { display:none; position:fixed; inset:0; background:#0006;
+                place-items:center; }
+    #scoreBox form { background:white; padding:1.5rem; border-radius:8px; }
+  </style>
 </head>
 <body>
-  <h1>My Free Single-User App</h1>
-  <div id="data-list"></div>
-  <form id="entry-form">
-    <input name="name" placeholder="Name" required>
-    <input name="email" placeholder="Email" required>
-    <button type="submit">Add</button>
-  </form>
-  <script src="main.js"></script>
+  <div id="calendar"></div>
+
+  <!-- lightweight modal -->
+  <div id="scoreBox">
+    <form>
+      <h3 id="taskTitle"></h3>
+      <label>Score: <input type="number" id="score" required></label>
+      <button type="submit">Save</button>
+      <button type="button" onclick="scoreBox.style.display='none'">Cancel</button>
+    </form>
+  </div>
+
+<script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.18/index.global.min.js"></script>
+<script>
+const API = 'https://script.google.com/macros/s/xxxxxxxxx/exec?key=YOURSECRET';
+const calendarEl = document.getElementById('calendar');
+const scoreBox  = document.getElementById('scoreBox');
+const taskTitle = document.getElementById('taskTitle');
+const scoreInput= document.getElementById('score');
+let selectedEvent = null;
+
+/* 1 · Load tasks for current ISO week */
+async function fetchTasks() {
+  const now = new Date();
+  const weekParam = now.toISOString().slice(0,4) + '-W' +
+    String(Math.ceil((((now - new Date(now.getFullYear(),0,1)) / 864e5) + now.getDay()+1)/7)).padStart(2,'0');
+  const res = await fetch(`${API}&week=${weekParam}`);
+  return res.json();
+}
+
+function init() {
+  const calendar = new FullCalendar.Calendar(calendarEl, {
+    initialView: 'timeGridWeek',
+    height: 'auto',
+    events: async (info, success) => {
+      const tasks = await fetchTasks();
+      success(tasks.map(t => ({
+        id: t.id,
+        title: t.title + (t.status === 'complete' ? ' ✅' : ''),
+        start: t.dueDate,
+        allDay: true,
+        color: t.status === 'complete' ? '#4caf50' : undefined
+      })));
+    },
+    eventClick: ({event}) => {
+      if (event.extendedProps.status === 'complete') return; // already done
+      selectedEvent = event;
+      taskTitle.textContent = event.title;
+      scoreInput.value = '';
+      scoreBox.style.display='grid';
+    }
+  });
+  calendar.render();
+}
+
+document.querySelector('#scoreBox form').addEventListener('submit', async e => {
+  e.preventDefault();
+  await fetch(API, {
+    method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({
+      id: selectedEvent.id,
+      status:'complete',
+      score:parseInt(scoreInput.value,10) || 0
+    })
+  });
+  location.reload();           // quick & dirty refresh
+});
+init();
+</script>
 </body>
 </html>
