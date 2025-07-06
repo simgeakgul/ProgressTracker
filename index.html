@@ -1,104 +1,19 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-  <!-- FullCalendar v6 injects its own CSS, so no <link> needed -->
-  <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.18/index.global.min.js"></script>
-  <style>
-    body { font-family: system-ui, sans-serif; margin: 0; }
-    #scoreBox {
-      display: none;
-      position: fixed;
-      inset: 0;
-      background: #0006;
-      place-items: center;
-    }
-    #scoreBox form {
-      background: white;
-      padding: 1.5rem;
-      border-radius: 8px;
-    }
-  </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Free App</title>
+  <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <div id="calendar"></div>
-
-  <!-- lightweight modal -->
-  <div id="scoreBox">
-    <form>
-      <h3 id="taskTitle"></h3>
-      <label>
-        Score:
-        <input type="number" id="score" required>
-      </label>
-      <button type="submit">Save</button>
-      <button type="button" onclick="scoreBox.style.display='none'">
-        Cancel
-      </button>
-    </form>
-  </div>
-
-  <script>
-    const API = 'https://script.google.com/macros/s/AKfycbwynq8ewF6CSS8RzjGOR6Ce8qSU8t-nBbj0t6CxsXy1GaOwi3AJeh4bnrdoOMeIAaQ4/exec';
-    const calendarEl = document.getElementById('calendar');
-    const scoreBox  = document.getElementById('scoreBox');
-    const taskTitle = document.getElementById('taskTitle');
-    const scoreInput= document.getElementById('score');
-    let selectedEvent = null;
-
-    // 1 · Load tasks for current ISO week (and log them)
-    async function fetchTasks() {
-        const res  = await fetch(API);    
-        const data = await res.json();
-        console.log('⚙️ tasks:', data);
-        return data;
-    }
-
-    function init() {
-      const calendar = new FullCalendar.Calendar(calendarEl, {
-        initialView: 'timeGridWeek',
-        height: 'auto',
-        events: async (info, success) => {
-          const tasks = await fetchTasks();
-          // Map each task into a FullCalendar event—include status for extendedProps
-          success(tasks.map(t => ({
-            id: t.id,
-            title: t.title + (t.status === 'complete' ? ' ✅' : ''),
-            start: t.dueDate,
-            allDay: true,
-            color: t.status === 'complete' ? '#4caf50' : undefined,
-            status: t.status   // gets shoved into event.extendedProps.status
-          })));
-        },
-        eventClick: ({ event }) => {
-          // now event.extendedProps.status is reliable
-          if (event.extendedProps.status === 'complete') return;
-          selectedEvent = event;
-          taskTitle.textContent = event.title;
-          scoreInput.value = '';
-          scoreBox.style.display = 'grid';
-        }
-      });
-      calendar.render();
-    }
-
-    // 2 · Submit completion + score
-    document.querySelector('#scoreBox form')
-      .addEventListener('submit', async e => {
-        e.preventDefault();
-        await fetch(API, {
-          method: 'POST',
-          headers: { 'Content-Type':'application/json' },
-          body: JSON.stringify({
-            id:     selectedEvent.id,
-            status: 'complete',
-            score:  parseInt(scoreInput.value, 10) || 0
-          })
-        });
-        location.reload(); // simplest way to refresh the view
-      });
-
-    init();
-  </script>
+  <h1>My Free Single-User App</h1>
+  <div id="data-list"></div>
+  <form id="entry-form">
+    <input name="name" placeholder="Name" required>
+    <input name="email" placeholder="Email" required>
+    <button type="submit">Add</button>
+  </form>
+  <script src="main.js"></script>
 </body>
 </html>
