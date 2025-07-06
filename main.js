@@ -26,3 +26,4 @@ document.getElementById('entry-form').addEventListener('submit', async e => {
 
 // Initial load
 loadData();
+
