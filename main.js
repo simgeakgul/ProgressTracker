@@ -1,28 +1,28 @@
-const form = document.getElementById("myForm");
-const status = document.getElementById("status");
+const API_URL = 'https://script.google.com/macros/s/AKfycbzFo0ngMabk3tYKOr81AulgTaZBqneQ6Pdj9hDoubAH1MX2HbLN7oZSvV8xOCwH7-Nj/exec';
 
-form.addEventListener("submit", async (e) => {
+// Fetch and display existing rows
+async function loadData() {
+  const res = await fetch(API_URL);
+  const data = await res.json();
+  document.getElementById('data-list').innerHTML =
+    data.map(item => `<p>${item.name} (${item.email})</p>`).join('');
+}
+
+// Handle form submissions
+document.getElementById('entry-form').addEventListener('submit', async e => {
   e.preventDefault();
-  status.textContent = "Sending...";
-
-  const data = {
-    name: document.getElementById("name").value,
-    email: document.getElementById("email").value,
-    message: document.getElementById("message").value
+  const form = e.target;
+  const payload = {
+    name: form.name.value,
+    email: form.email.value
   };
-
-  const response = await fetch("https://script.google.com/macros/s/AKfycbyIwg1Xz1FX8_h4M79rRGEY4QW6r6zJGeaVLWWe2cQqs8i4h4HC5GwHS77vH15I29Te/exec", {
-    method: "POST",
-    body: JSON.stringify(data),
-    headers: {
-      "Content-Type": "application/json"
-    }
+  await fetch(API_URL, {
+    method: 'POST',
+    body: JSON.stringify(payload)
   });
-
-  if (response.ok) {
-    status.textContent = "Message sent!";
-    form.reset();
-  } else {
-    status.textContent = "Error sending message.";
-  }
+  form.reset();
+  loadData();
 });
+
+// Initial load
+loadData();
