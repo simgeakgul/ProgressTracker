@@ -3,17 +3,28 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>My Free App</title>
+  <title>Weekly Planner</title>
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <h1>My Free Single-User App</h1>
-  <div id="data-list"></div>
-  <form id="entry-form">
-    <input name="name" placeholder="Name" required>
-    <input name="email" placeholder="Email" required>
-    <button type="submit">Add</button>
+  <h1>My Free Weekly Planner</h1>
+
+  <!-- Calendar grid -->
+  <div id="week-grid" class="grid"></div>
+
+  <!-- Add-task form -->
+  <form id="task-form">
+    <input type="date" name="date"   required>
+    <select name="status">
+      <option value="To-Do">To-Do</option>
+      <option value="Done">Done</option>
+    </select>
+    <input  name="expected" placeholder="Expected time (e.g. 14:00 or 2 h)">
+    <input  name="subject"  placeholder="Subject"  required>
+    <input  name="resource" placeholder="Resource / link">
+    <button type="submit">Add Task</button>
   </form>
+
   <script src="main.js"></script>
 </body>
 </html>
