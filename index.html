@@ -39,7 +39,7 @@
   </div>
 
   <script>
-    const API = 'https://script.google.com/macros/s/AKfycbw6Ca8CbUFbrKP6S5G5_X5nRQ8_A8g4HyCo3Ybn75C4qMLow4_XTuu3_Lh1RZq48v9M/exec';
+    const API = 'https://script.google.com/macros/s/AKfycbyjGe_H5TBlOFOoSbOotGUl-lohn8RjMncKGKA8jAgjRa6BWSEnOefcKSZfeDXjYstf/exec';
     const calendarEl = document.getElementById('calendar');
     const scoreBox  = document.getElementById('scoreBox');
     const taskTitle = document.getElementById('taskTitle');
@@ -48,20 +48,10 @@
 
     // 1 · Load tasks for current ISO week (and log them)
     async function fetchTasks() {
-      const now = new Date();
-      const weekParam = now.toISOString().slice(0,4) + '-W' +
-        String(
-          Math.ceil(
-            (
-              ((now - new Date(now.getFullYear(),0,1)) / 864e5) +
-              now.getDay() + 1
-            ) / 7
-          )
-        ).padStart(2,'0');
-      const res  = await fetch(`${API}?week=${weekParam}`);
-      const data = await res.json();
-      console.log('⚙️ tasks from server:', data);
-      return data;
+        const res  = await fetch(API);    
+        const data = await res.json();
+        console.log('⚙️ tasks:', data);
+        return data;
     }
 
     function init() {
