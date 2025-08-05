@@ -1,5 +1,5 @@
 // 1) Paste your Web App "exec" URL here:
-const API_URL = 'https://script.google.com/macros/s/ABC123/exec';
+const API_URL = 'https://script.google.com/macros/s/AKfycbzqFplv1tsB5vzVAcc8avaYfTPeooyC9N2UyCW97KII-hsjO3_qCo8ETsgRZJ5NpcE/exec';
 
 /**
  * Format a YYYY-MM-DD string into "DD.MM.YYYY (weekday)" in Turkish
