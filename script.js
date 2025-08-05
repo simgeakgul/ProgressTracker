@@ -62,12 +62,19 @@ async function loadTasks() {
         // Details: Kaynak, Görev, Süre, Notlar
         const details = document.createElement('div');
         details.className = 'task-details';
-        details.innerHTML = `
-          <span>📚 ${task.kaynak}</span>
-          <span>📝 ${task.gorev}</span>
-          <span>⏱️ ${task.sure} dk</span>
-          ${task.notlar ? `<span>🗒️ ${task.notlar}</span>` : ''}
-        `;
+
+        [
+        ['📚', task.kaynak],
+        ['📝', task.gorev],
+        ['⏱️', task.sure + ' dk'],
+        ['🗒️', task.notlar]
+        ].forEach(([emoji, text]) => {
+        if (!text) return;        // skip empty notes
+        const span = document.createElement('span');
+        span.textContent = `${emoji} ${text}`;
+        details.appendChild(span);
+        });
+
         li.appendChild(details);
 
         listEl.appendChild(li);
