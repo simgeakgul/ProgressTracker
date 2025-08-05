@@ -90,6 +90,16 @@ async function loadTasks() {
         });
 
         li.appendChild(details);
+
+        const FORM_PREFILL = 'https://docs.google.com/forms/d/e/1FAIpQLScGJCUtmgkuCOlr1BwyeQ4eAKiwPQJsKhtulMrqbWUi3DTqbg/viewform?usp=pp_url&entry.91911668=';
+        const formBtn = document.createElement('a');
+        formBtn.className = 'form-button';
+        formBtn.textContent = 'Raporla';
+        formBtn.target = '_blank';
+        formBtn.href = FORM_PREFILL + encodeURIComponent(task.id);
+        li.appendChild(formBtn);
+
+
         listEl.appendChild(li);
       });
     });
