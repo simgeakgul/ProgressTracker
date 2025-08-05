@@ -177,3 +177,29 @@ btnTasks.addEventListener('click', () => {
   btnTasks.classList.add('active');
   btnProgress.classList.remove('active');
 });
+
+// 1) Ensure there’s a container for the “istatistik” view
+let istatistikView = document.getElementById('istatistik-view');
+if (!istatistikView) {
+  istatistikView = document.createElement('section');
+  istatistikView.id = 'istatistik-view';
+  istatistikView.style.display = 'none';
+  istatistikView.innerHTML = '<div class="empty-state">Henüz çözülmüş deneme yok</div>';
+  // place it right after the other views
+  tasksView.parentNode.insertBefore(istatistikView, tasksView.nextSibling);
+}
+
+// 2) Wire up the button
+const btnIstatistik = document.getElementById('btn-istatistik');
+btnIstatistik.addEventListener('click', () => {
+  // hide the other two
+  progressView.style.display = 'none';
+  tasksView.style.display    = 'none';
+  // show our new view
+  istatistikView.style.display = '';
+
+  // toggle the active class
+  btnIstatistik.classList.add('active');
+  btnProgress .classList.remove('active');
+  btnTasks    .classList.remove('active');
+});

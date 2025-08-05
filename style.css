@@ -150,3 +150,8 @@
     background: #1c5980;
   }
   
+.empty-state {
+    padding: 1rem;
+    font-style: italic;
+    color: #555;
+  }
