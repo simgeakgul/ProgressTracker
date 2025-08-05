@@ -154,6 +154,7 @@ async function loadTopicProgress() {
   async function init() {
     await loadTopicProgress();   // <-- new
     await loadTasks();           // existing
+    btnTasks.click();
   }
 
 init();
