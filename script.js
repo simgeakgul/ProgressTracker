@@ -1,5 +1,5 @@
 // 1) Paste your Web App "exec" URL here:
-const API_URL = 'https://script.google.com/macros/s/AKfycbzqFplv1tsB5vzVAcc8avaYfTPeooyC9N2UyCW97KII-hsjO3_qCo8ETsgRZJ5NpcE/exec';
+const API_URL = 'https://script.google.com/macros/s/AKfycbw7yoW7IY_Psk3Zbaim0bo_3iSjvsj4yvgn-cQvCOsoK5UXdoVZwd0Dh0cpxtmHzTA/exec';
 
 /**
  * Format a YYYY-MM-DD string into "DD.MM.YYYY (weekday)" in Turkish
@@ -39,7 +39,6 @@ async function loadTasks() {
     }
 
     const grouped = groupByDate(tasks);
-    // Sort dates ascending
     const dates = Object.keys(grouped).sort();
 
     dates.forEach(date => {
@@ -49,34 +48,52 @@ async function loadTasks() {
       header.textContent = formatDateHeader(date);
       listEl.appendChild(header);
 
-      // Tasks for that date
       grouped[date].forEach(task => {
         const li = document.createElement('li');
 
-        // Header row: Ders — Konu
+        // 1) Color the card based on status
+        const st = (task.status || '').toString().toLowerCase();
+        if (st === 'complete' || st === 'completed') {
+          li.classList.add('task-complete');
+        } else {
+          li.classList.add('task-incomplete');
+        }
+
+        // 2) Header row: Ders — Konu + status badge
         const h = document.createElement('div');
         h.className = 'task-header';
-        h.textContent = `${task.ders} — ${task.konu}`;
+
+        const title = document.createElement('span');
+        title.textContent = `${task.ders} — ${task.konu}`;
+        h.appendChild(title);
+
+        const badge = document.createElement('span');
+        badge.className = 'status-badge ' +
+          (st === 'complete' || st === 'completed'
+            ? 'status-complete'
+            : 'status-incomplete');
+        badge.textContent = task.status;
+        h.appendChild(badge);
+
         li.appendChild(h);
 
-        // Details: Kaynak, Görev, Süre, Notlar
+        // 3) Details: Kaynak, Görev, Süre, Notlar
         const details = document.createElement('div');
         details.className = 'task-details';
 
         [
-        ['📚', task.kaynak],
-        ['📝', task.gorev],
-        ['⏱️', task.sure + ' dk'],
-        ['🗒️', task.notlar]
+          ['📚', task.kaynak],
+          ['📝', task.gorev],
+          ['⏱️', task.sure + ' dk'],
+          ['🗒️', task.notlar]
         ].forEach(([emoji, text]) => {
-        if (!text) return;        // skip empty notes
-        const span = document.createElement('span');
-        span.textContent = `${emoji} ${text}`;
-        details.appendChild(span);
+          if (!text) return;
+          const span = document.createElement('span');
+          span.textContent = `${emoji} ${text}`;
+          details.appendChild(span);
         });
 
         li.appendChild(details);
-
         listEl.appendChild(li);
       });
     });
