@@ -63,7 +63,7 @@ async function loadTasks() {
         const details = document.createElement('div');
         details.className = 'task-details';
         details.innerHTML = `
-          <span>📚 <a href="${task.kaynak}" target="_blank">Kaynak</a></span>
+          <span>📚 ${task.kaynak}</span>
           <span>📝 ${task.gorev}</span>
           <span>⏱️ ${task.sure} dk</span>
           ${task.notlar ? `<span>🗒️ ${task.notlar}</span>` : ''}
