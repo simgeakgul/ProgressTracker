@@ -7,9 +7,9 @@ const API_URL = 'https://script.google.com/macros/s/AKfycbw7yoW7IY_Psk3Zbaim0bo_
 function formatDateHeader(str) {
   const d = new Date(str);
   const days = ['Pazar','Pazartesi','Salı','Çarşamba','Perşembe','Cuma','Cumartesi'];
-  const dd = String(d.getDate()).padStart(2,'0');
-  const mm = String(d.getMonth()+1).padStart(2,'0');
-  return `${dd}.${mm}.${d.getFullYear()} (${days[d.getDay()]})`;
+  return `${String(d.getDate()).padStart(2,'0')}.` +
+         `${String(d.getMonth()+1).padStart(2,'0')}.` +
+         `${d.getFullYear()} (${days[d.getDay()]})`;
 }
 
 /**
@@ -17,9 +17,7 @@ function formatDateHeader(str) {
  */
 function groupByDate(tasks) {
   return tasks.reduce((map, task) => {
-    const key = task.tarih;
-    if (!map[key]) map[key] = [];
-    map[key].push(task);
+    (map[task.tarih] ||= []).push(task);
     return map;
   }, {});
 }
@@ -39,14 +37,12 @@ async function loadTasks() {
     }
 
     const grouped = groupByDate(tasks);
-    const dates = Object.keys(grouped).sort();
-
-    dates.forEach(date => {
+    Object.keys(grouped).sort().forEach(date => {
       // Date header
-      const header = document.createElement('div');
-      header.className = 'date-group';
-      header.textContent = formatDateHeader(date);
-      listEl.appendChild(header);
+      const hdr = document.createElement('div');
+      hdr.className = 'date-group';
+      hdr.textContent = formatDateHeader(date);
+      listEl.appendChild(hdr);
 
       grouped[date].forEach(task => {
         const li = document.createElement('li');
@@ -60,12 +56,12 @@ async function loadTasks() {
         }
 
         // 2) Header row: Ders — Konu + status badge
-        const h = document.createElement('div');
-        h.className = 'task-header';
+        const header = document.createElement('div');
+        header.className = 'task-header';
 
         const title = document.createElement('span');
         title.textContent = `${task.ders} — ${task.konu}`;
-        h.appendChild(title);
+        header.appendChild(title);
 
         const badge = document.createElement('span');
         badge.className = 'status-badge ' +
@@ -73,9 +69,9 @@ async function loadTasks() {
             ? 'status-complete'
             : 'status-incomplete');
         badge.textContent = task.status;
-        h.appendChild(badge);
+        header.appendChild(badge);
 
-        li.appendChild(h);
+        li.appendChild(header);
 
         // 3) Details: Kaynak, Görev, Süre, Notlar
         const details = document.createElement('div');
