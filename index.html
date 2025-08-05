@@ -12,10 +12,22 @@
   </header>
 
   <main>
-    <!-- Task list will be injected here -->
-    <section id="topic-progress"></section>
-    <div id="loading">Yükleniyor…</div>
-    <ul id="task-list"></ul>
+    <!-- Toggle buttons -->
+    <div id="view-toggle" class="view-toggle">
+      <button id="btn-progress" class="active">İlerleme</button>
+      <button id="btn-tasks">Görevler</button>
+    </div>
+
+    <!-- Progress view -->
+    <section id="progress-view">
+      <section id="topic-progress"></section>
+    </section>
+
+    <!-- Tasks view (hidden by default) -->
+    <section id="tasks-view" style="display: none;">
+      <div id="loading">Yükleniyor…</div>
+      <ul id="task-list"></ul>
+    </section>
   </main>
 
   <script src="script.js"></script>

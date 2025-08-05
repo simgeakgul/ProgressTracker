@@ -157,3 +157,23 @@ async function loadTopicProgress() {
   }
 
 init();
+
+// grab toggle buttons and views
+const btnProgress  = document.getElementById('btn-progress');
+const btnTasks     = document.getElementById('btn-tasks');
+const progressView = document.getElementById('progress-view');
+const tasksView    = document.getElementById('tasks-view');
+
+btnProgress.addEventListener('click', () => {
+  progressView.style.display = '';       // show progress
+  tasksView.style.display    = 'none';   // hide tasks
+  btnProgress.classList.add('active');
+  btnTasks.classList.remove('active');
+});
+
+btnTasks.addEventListener('click', () => {
+  progressView.style.display = 'none';
+  tasksView.style.display    = '';       // show tasks
+  btnTasks.classList.add('active');
+  btnProgress.classList.remove('active');
+});
