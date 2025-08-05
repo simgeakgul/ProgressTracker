@@ -1,6 +1,20 @@
 // 1) Paste your Web App "exec" URL here:
-const API_URL = 'https://script.google.com/macros/s/AKfycbw7yoW7IY_Psk3Zbaim0bo_3iSjvsj4yvgn-cQvCOsoK5UXdoVZwd0Dh0cpxtmHzTA/exec';
-
+const API_URL = 'https://script.google.com/macros/s/AKfycbyeSzgoR6bif60oYv8Nc3Ejd3aGa1yNEoBKhgRKwo6mmVwUEw-l3h5vhtz0g0WsHf0/exec';
+const PROG_URL = API_URL + '?mode=progress';
+const STAGES   = [
+  "Başlanmadı",
+  "Konu Çalış",
+  "Konu Testi",
+  "Tekrar 1 (Test)",
+  "Tekrar 2 (Konu + Test)",
+  "Tekrar 3 (Test)"
+];
+// compute percent (0–100) from a stage name
+function pctFromStage(stage) {
+  const i = STAGES.indexOf(stage);
+  if (i < 0) return 0;
+  return (i / (STAGES.length - 1)) * 100;
+}
 /**
  * Format a YYYY-MM-DD string into "DD.MM.YYYY (weekday)" in Turkish
  */
@@ -109,5 +123,37 @@ async function loadTasks() {
   }
 }
 
-// Kick things off
-loadTasks();
+async function loadTopicProgress() {
+    const container = document.getElementById('topic-progress');
+    try {
+      const resp   = await fetch(PROG_URL);
+      const topics = await resp.json();  // [{subject,progress},…]
+      topics.forEach(t => {
+        const div = document.createElement('div');
+        div.className = 'topic-item';
+        // label
+        const label = document.createElement('span');
+        label.textContent = `${t.subject} — ${t.progress}`;
+        // bar
+        const barWrap = document.createElement('div');
+        barWrap.className = 'progress-bar';
+        const fill = document.createElement('div');
+        fill.className = 'progress-fill';
+        fill.style.width = pctFromStage(t.progress) + '%';
+        barWrap.appendChild(fill);
+        // assemble
+        div.append(label, barWrap);
+        container.appendChild(div);
+      });
+    } catch (e) {
+      console.error('Failed to load topic progress', e);
+    }
+  }
+  
+
+  async function init() {
+    await loadTopicProgress();   // <-- new
+    await loadTasks();           // existing
+  }
+
+init();
