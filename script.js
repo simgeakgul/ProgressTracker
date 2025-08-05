@@ -56,6 +56,7 @@ async function loadTasks() {
       const hdr = document.createElement('div');
       hdr.className = 'date-group';
       hdr.textContent = formatDateHeader(date);
+      hdr.dataset.date = date;               // ← tag it
       listEl.appendChild(hdr);
 
       grouped[date].forEach(task => {
@@ -117,6 +118,10 @@ async function loadTasks() {
         listEl.appendChild(li);
       });
     });
+    const today = new Date().toISOString().slice(0, 10);  // "YYYY-MM-DD"
+    const el    = document.querySelector(`.date-group[data-date="${today}"]`);
+    if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    
   } catch (err) {
     loadingEl.textContent = 'Görevler yüklenemedi.';
     console.error(err);
