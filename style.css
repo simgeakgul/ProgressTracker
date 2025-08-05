@@ -155,3 +155,31 @@
     font-style: italic;
     color: #555;
   }
+
+/* make the form-link look & flex like the buttons */
+.view-toggle .toggle-link {
+    flex: 1;                        /* same flex as the buttons */
+    display: inline-flex;           /* enable flex centering */
+    align-items: center;
+    justify-content: center;
+    padding: 0.6rem;                /* same padding */
+    margin-right: 0.5rem;           /* same gap */
+    background: #2980b9;            /* same base color */
+    color: white;                   /* same text color */
+    text-decoration: none;          /* remove underline */
+    border: none;                   /* remove default anchor border */
+    border-radius: 4px;             /* same radius */
+    font-weight: bold;              /* same weight */
+    cursor: pointer;                /* same cursor */
+  }
+  
+  /* remove margin on the last element, if needed */
+  .view-toggle .toggle-link:last-of-type {
+    margin-right: 0;
+  }
+  
+  /* hover state to match button hover (optional) */
+  .view-toggle .toggle-link:hover {
+    background: #1c5980;
+  }
+  
