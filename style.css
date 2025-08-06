@@ -1,9 +1,19 @@
-/* Base reset */
-* {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
+/* ───────────  THEME VARIABLES  ─────────── */
+:root {
+    --clr-primary:        #e91e63;  /* main pink */
+    --clr-primary-dark:   #ad1457;  /* darker variant */
+    --clr-primary-light:  #f06292;  /* lighter variant */
+  
+    --clr-bg-header:      #c2185b;  /* header bar */
+    --clr-success-bg:     #fce4ec;  /* “complete” card background */
+    --clr-success-border: #ec407a;  /* “complete” border / badge */
+  
+    --clr-error-bg:       #fdecea;  /* “incomplete” card background */
+    --clr-error-border:   #e74c3c;  /* “incomplete” border / badge */
   }
+  
+  /* ───────────  BASE RESET  ─────────── */
+  * { box-sizing: border-box; margin: 0; padding: 0; }
   
   body {
     font-family: -apple-system, BlinkMacSystemFont, sans-serif;
@@ -12,46 +22,38 @@
     color: #333;
   }
   
+  main { padding: 1rem; }
+  
+  /* ───────────  HEADER  ─────────── */
   header {
-    background: #2c3e50;
-    color: white;
+    background: var(--clr-bg-header);
+    color: #fff;
     padding: 1rem;
     text-align: center;
   }
   
-  main {
-    padding: 1rem;
-  }
+  /* ───────────  LOADING TEXT  ─────────── */
+  #loading { text-align: center; margin: 2rem 0; color: #666; }
   
-  /* Loading text */
-  #loading {
-    text-align: center;
-    margin: 2rem 0;
-    color: #666;
-  }
-  
-  /* Group heading (date) */
+  /* ───────────  DATE GROUP HEADING  ─────────── */
   .date-group {
-    margin-top: 1.5rem;
-    margin-bottom: 0.5rem;
+    margin: 1.5rem 0 0.5rem;
     font-weight: bold;
     font-size: 1.1rem;
   }
   
-  /* Task cards */
-  #task-list {
-    list-style: none;
-  }
+  /* ───────────  TASK CARDS  ─────────── */
+  #task-list { list-style: none; }
   
   #task-list li {
-    background: white;
+    background: #fff;
     border: 1px solid #ddd;
     border-radius: 6px;
     padding: 1rem;
     margin-bottom: 1rem;
   }
   
-  /* Task title row */
+  /* Title row */
   .task-header {
     display: flex;
     justify-content: space-between;
@@ -60,126 +62,66 @@
   }
   
   /* Details line */
-  .task-details {
-    font-size: 0.9rem;
-    color: #555;
-  }
+  .task-details { font-size: 0.9rem; color: #555; }
+  .task-details span { display: inline-block; margin-right: 0.5rem; }
   
-  .task-details span {
-    display: inline-block;
-    margin-right: 0.5rem;
-  }
+  /* Card colour by status */
+  .task-complete   { background: var(--clr-success-bg);   border-color: var(--clr-success-border); }
+  .task-incomplete { background: var(--clr-error-bg);     border-color: var(--clr-error-border); }
   
-  /* Card color based on status */
-.task-complete {
-    background: #e8f5e9;      /* light green */
-    border-color: #2ecc71;    /* green */
-  }
-  .task-incomplete {
-    background: #fdecea;      /* light red */
-    border-color: #e74c3c;    /* red */
-  }
-  
-  /* Status badge style */
+  /* Status badge */
   .status-badge {
     padding: 0.2rem 0.6rem;
     border-radius: 4px;
     font-size: 0.8rem;
     font-weight: bold;
-    color: white;
+    color: #fff;
     margin-left: 0.5rem;
   }
-  .status-complete   { background: #2ecc71; }  /* green */
-  .status-incomplete { background: #e74c3c; }  /* red  */
+  .status-complete   { background: var(--clr-success-border); }
+  .status-incomplete { background: var(--clr-error-border); }
   
-  .form-button {
-    display: inline-block;
-    margin-top: 0.5rem;
-    padding: 0.4rem 0.8rem;
-    background: #2980b9;
-    color: white;
-    text-decoration: none;
+  /* “Raporla” button */
+  .form-button,
+  .view-toggle .toggle-link,
+  .view-toggle button {
+    flex: 1;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.6rem;
+    background: var(--clr-primary);
+    color: #fff;
+    border: none;
     border-radius: 4px;
+    font-weight: bold;
+    cursor: pointer;
+    text-decoration: none;
     font-size: 0.9rem;
   }
-
-  /* Sub-topic progress list */
-#topic-progress {
-    margin-bottom: 1rem;
-  }
-  .topic-item {
-    margin-bottom: 0.6rem;
-    font-size: 0.9rem;
-  }
+  .view-toggle button.active,
+  .view-toggle .toggle-link:hover { background: var(--clr-primary-dark); }
+  
+  /* ───────────  PROGRESS BAR  ─────────── */
+  #topic-progress { margin-bottom: 1rem; }
+  .topic-item     { margin-bottom: 0.6rem; font-size: 0.9rem; }
   .topic-item span { display: block; margin-bottom: 0.2rem; }
   
-  /* bar container */
   .progress-bar {
     height: 8px;
     background: #eee;
     border-radius: 4px;
     overflow: hidden;
   }
-  /* fill per-topic */
   .progress-fill {
     height: 100%;
-    background: #2980b9;
+    background: var(--clr-primary-light);
     transition: width 0.3s ease;
   }
   
-  /* Toggle bar */
-.view-toggle {
-    display: flex;
-    margin-bottom: 1rem;
-  }
-  .view-toggle button {
-    flex: 1;
-    padding: 0.6rem;
-    margin-right: 0.5rem;
-    background: #2980b9;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    font-weight: bold;
-  }
-  .view-toggle button:last-child {
-    margin-right: 0;
-  }
-  .view-toggle button.active {
-    background: #1c5980;
-  }
+  /* ───────────  VIEW TOGGLE WRAPPER  ─────────── */
+  .view-toggle { display: flex; margin-bottom: 1rem; }
   
-.empty-state {
-    padding: 1rem;
-    font-style: italic;
-    color: #555;
-  }
-
-/* make the form-link look & flex like the buttons */
-.view-toggle .toggle-link {
-    flex: 1;                        /* same flex as the buttons */
-    display: inline-flex;           /* enable flex centering */
-    align-items: center;
-    justify-content: center;
-    padding: 0.6rem;                /* same padding */
-    margin-right: 0.5rem;           /* same gap */
-    background: #2980b9;            /* same base color */
-    color: white;                   /* same text color */
-    text-decoration: none;          /* remove underline */
-    border: none;                   /* remove default anchor border */
-    border-radius: 4px;             /* same radius */
-    font-weight: bold;              /* same weight */
-    cursor: pointer;                /* same cursor */
-  }
-  
-  /* remove margin on the last element, if needed */
-  .view-toggle .toggle-link:last-of-type {
-    margin-right: 0;
-  }
-  
-  /* hover state to match button hover (optional) */
-  .view-toggle .toggle-link:hover {
-    background: #1c5980;
-  }
+  /* ───────────  EMPTY STATE  ─────────── */
+  .empty-state { padding: 1rem; font-style: italic; color: #555; }
   
